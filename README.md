@@ -189,5 +189,3 @@ Relatório completo: [`docs/testes.md`](docs/testes.md).
 - [Configuração do MARS](docs/configuracao-mars.md)
 - [Arquitetura](docs/arquitetura.md)
 - [Relatório de testes](docs/testes.md)
-- [Matriz de rastreabilidade](docs/rastreabilidade.md)
-- [Auditoria acadêmica](docs/auditoria.md)
