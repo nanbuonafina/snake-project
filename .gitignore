@@ -1,0 +1,13 @@
+# Simulador MARS (baixado localmente, ver docs/configuracao-mars.md; não versionado)
+tools/*.jar
+
+# Saídas temporárias dos testes automáticos (tools/run_tests.sh)
+tests/build/
+
+# Arquivos temporários de sistema e editores
+*.log
+*~
+*.swp
+.DS_Store
+.vscode/
+.idea/
