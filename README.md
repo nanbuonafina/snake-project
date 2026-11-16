@@ -4,9 +4,8 @@ Jogo da cobrinha (*Snake*) escrito inteiramente em **Assembly MIPS** para o
 simulador **MARS 4.5**. A saída é o **Bitmap Display** e a entrada são as teclas
 **W, A, S, D**.
 
-- **Especificação oficial:** [`doc/projeto_snake-especificacao.pdf`](doc/projeto_snake-especificacao.pdf).
 - **Arquivo entregue:** [`src/snake.asm`](src/snake.asm).
-- **Integrantes do grupo:** Maria Fernanda, Juliana Maria, Vitor Fernandes, Vinicius  Silva.
+- **Integrantes do grupo:** Maria Fernanda, Juliana Maria, Vitor Fernandes, Vinicius  Silva, Lucas.
 
 ## Descrição
 
