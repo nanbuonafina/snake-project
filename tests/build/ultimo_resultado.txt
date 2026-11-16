@@ -1,0 +1,159 @@
+== T00 montagem de src/snake.asm
+  ok     monta sem erros nem avisos
+== T00b execução do jogo completo por 300000 instruções (sem teclado: aguarda 1ª tecla)
+  ok     executa sem erro de execução
+== t_collide.asm
+  ok     T09 (0,0) indo p/ cima: STATUS_WALL
+  ok     T09/D7 colisao nao soma ponto (score = 0)
+  ok     T09 apos colisao a cabeca continua desenhada em (0,0)
+  ok     T09 apos colisao a fila nao mudou (head_idx = 0)
+  ok     T09 (0,0) indo p/ esquerda: STATUS_WALL
+  ok     T09 31 passos p/ direita ate (0,31): todos OK
+  ok     T09 (0,31) indo p/ direita: STATUS_WALL
+  ok     T09/D7 score = 31 (o tick da colisao nao conta)
+  ok     T09 31 passos p/ baixo ate (31,0): todos OK
+  ok     T09 (31,0) indo p/ baixo: STATUS_WALL
+  ok     T10 cobra montada com comprimento 5
+  ok     T10 cabeca entra no corpo: STATUS_BODY
+  ok     T10 apos colisao: comprimento continua 5
+  ok     T10/T12 score = 4 comidas*6 + 2 ticks = 26 (sem ponto da colisao)
+  ok     T10 apos colisao: cauda (0,2) continua desenhada
+  ok     T10 apos colisao: exatamente 5 celulas de cobra
+  ok     D8 comer a ultima celula livre: STATUS_FULL
+RESULTADO: falhas = 0
+== t_food.asm
+  ok     T04 2000 sorteios: indice sempre em 0..1023
+  ok     T04 2000 sorteios: nunca sobre a cobra em (0,0)
+  ok     T04 todas as linhas I = 0..31 sorteadas (mascara de bits)
+  ok     T04 todas as colunas J = 0..31 sorteadas (mascara de bits)
+  ok     T04 2000 sorteios: celula sorteada pintada de verde
+  ok     T04 metade ocupada: 1000 sorteios, nenhum sobre a cobra
+  ok     T04 uma unica celula livre (777): comida vai para ela
+RESULTADO: falhas = 0
+== t_grid.asm
+  ok     T01 frame esta em 0x10010000 (base do Bitmap Display)
+  ok     T02 celula (0,0)   -> 0x10010000
+  ok     T02 celula (0,31)  -> 0x1001007C
+  ok     T02 celula (31,0)  -> 0x10010F80
+  ok     T02 celula (31,31) -> 0x10010FFC
+  ok     T02 celula (10,20) -> get_cell le o que draw_cell escreveu
+  ok     T02 score em 0x10012018 (endereco lido pelo teste T14)
+  ok     T02 length em 0x10012008 (endereco lido pelos testes T13/T14)
+  ok     T02 clear_screen deixa as 1024 celulas com a cor de fundo
+RESULTADO: falhas = 0
+== t_init.asm
+  ok     T03 comprimento inicial = 1
+  ok     T03 head_idx = 0
+  ok     T03 tail_idx = 0
+  ok     T03 body[0] = celula (0,0)
+  ok     T03 dir = parada (D1)
+  ok     T03 next_dir = parada (D1)
+  ok     T03 pontuacao inicial = 0
+  ok     T03 celula (0,0) pintada com a cor da cobra
+  ok     T03 exatamente 1 celula de cobra na tela
+  ok     T03 exatamente 1 celula de comida na tela
+  ok     T03 food_idx aponta para a celula de comida
+  ok     T03 demais 1022 celulas com a cor de fundo
+RESULTADO: falhas = 0
+== t_input.asm
+  ok     T05 sem tecla pronta: read_input retorna sem mudar a direcao
+  ok     T05 tecla 'x' e ignorada
+  ok     T05 parada (D1): 'a' e aceita como primeira direcao
+  ok     T05 indo p/ direita: 'a' (oposta) e ignorada (D2)
+  ok     T05 'W' maiusculo vira cima (D3)
+  ok     T05 indo p/ direita: 's' vira baixo
+  ok     T05 'D' maiusculo vira direita (D3)
+  ok     T05 indo p/ cima: 's' (oposta) e ignorada
+  ok     T05 indo p/ cima: 'S' (oposta) e ignorada
+  ok     T05 indo p/ cima: 'a' vira esquerda
+  ok     T05 indo p/ esquerda: 'd' (oposta) e ignorada
+  ok     T05 indo p/ baixo: 'w' (oposta) e ignorada
+  ok     T05 indo p/ baixo: 's' (mesma direcao) mantem baixo
+  ok     T06 sem tecla nova, step repete a direcao anterior
+  ok     T05 wait_first_key retorna apos tecla 'd' (direita)
+  ok     T06 wait_tick: 1 tick dura >= 500 ms
+  ok     T06 wait_tick: 1 tick dura < 600 ms
+  ok     T06 wait_tick: 4 ticks duram >= 2000 ms (sem atraso acumulado)
+  ok     T06 wait_tick: 4 ticks duram < 2100 ms
+  ok     T06p apos pausa de 5 s: o 1o tick sai imediatamente (< 100 ms)
+  ok     T06p apos pausa de 5 s: os 3 ticks seguintes NAO sao recuperados de uma vez (>= 1000 ms)
+  ok     T06p/T12 apos pausa de 5 s: 1 tick vencido gera so 1 movimento/ponto
+RESULTADO: falhas = 0
+== t_invariants.asm
+  ok     T15 invariantes verificadas apos cada passo (codigo do 1o erro; 0 = nenhum)
+  ok     T15 cobra chegou a comprimento >= 20 (varias celulas exercitadas)
+  ok     T15 houve colisoes com parede (>= 1)
+  ok     T15 houve colisoes com o corpo (>= 1)
+  info   passos=4000  partidas=15  comprimento max=48  comidas=169  paredes=11  corpo=3
+RESULTADO: falhas = 0
+== t_move.asm
+  ok     T07 10 x direita + 10 x baixo: cabeca em (10,10)
+  ok     T07 esquerda: (10,10) -> (10,9)
+  ok     T07 cima:     (10,9)  -> (9,9)
+  ok     T07 direita:  (9,9)   -> (9,10)
+  ok     T07 baixo:    (9,10)  -> (10,10)
+  ok     T07 5 passos p/ direita: todos com STATUS_OK
+  ok     T07 cabeca em (0,5)
+  ok     T07 comprimento continua 1 (sem comida)
+  ok     T07 celula (0,0) apagada (cauda removida)
+  ok     T07 exatamente 1 celula de cobra na tela
+  ok     T12 5 ticks = 5 pontos
+  ok     T08 comer: STATUS_OK
+  ok     T08 comer: comprimento 1 -> 2
+  ok     T12 1 tick + 1 comida = 1 + 5 = 6 pontos
+  ok     T08 comer: cauda (0,0) permanece (cresce na cauda)
+  ok     T08 comer: nova comida na tela (exatamente 1)
+  ok     T08 comer: nova comida fora da cobra
+  ok     T08 apos 5 comidas: comprimento 6
+  ok     T12 5 ticks + 5 comidas = 30 pontos
+  ok     T07/D6 2004 passos em circulo 2x3 (cabeca entra na celula que a cauda libera): todos OK
+  ok     T07 apos 2004 passos: comprimento 6
+  ok     T07 apos 2004 passos: exatamente 6 celulas de cobra
+  ok     T12 2009 ticks + 5 comidas = 2034 pontos
+  ok     T07 fila circular: head_idx = 2009 mod 1024 = 985
+  ok     T07 fila circular: tail_idx = 2004 mod 1024 = 980
+  ok     T07 fila[980] = (0,0) (cauda)
+  ok     T07 fila[981] = (0,1)
+  ok     T07 fila[982] = (0,2)
+  ok     T07 fila[983] = (1,2)
+  ok     T07 fila[984] = (1,1)
+  ok     T07 fila[985] = (1,0) (cabeca)
+RESULTADO: falhas = 0
+== T13 ponta a ponta: main real, tecla 'd' simulada, até bater na parede direita
+         Motivo: colisao com a parede
+         Comprimento final: 1
+         Comidas coletadas: 0
+         Movimentos (0,5 s cada): 31
+         PONTUACAO FINAL: 31
+  info   tempo total: 16596 ms (32 ticks de 500 ms = 16000 ms + inicialização do Java)
+  ok     T13 parede direita após 31 movimentos; pontuação = movimentos + 5*comidas = memória; tempo coerente
+  info   tela final: fundo=1022 cobra=0 comida=1 vermelho=1 outras=0 azuis=[-] vermelho_em=31 length=1
+  ok     T13 tela final consistente: sem rastros, cabeça vermelha em (0,31), 1 comida
+== T14 sem tecla: o jogo real aguarda a 1ª tecla sem mover nem pontuar (3 milhões de instruções)
+  info   score=0 length=1 next_dir=0 tela: cobra=[0,] comida=1 fundo=1022
+  ok     T14 parada em (0,0), pontuação 0, 1 comida, sem erro
+== T16 renderização no Bitmap Display real do MARS (tools/BitmapProbe.java)
+         config: unit=16x16 display=512x512 base=0x10010000 conectado=true
+         imagem 512x512: pixels_acesos=512
+         celulas16: azul=1 verde=1 vermelho=0 outras=0 mistas=0 azuis=(0,6) verdes=(26,6)
+  ok     T16a config correta: cobra e comida visíveis em células 16x16 (cobra na linha 0, indo p/ direita)
+         config: unit=1x1 display=512x512 base=0x10010000 conectado=true
+         imagem 512x512: pixels_acesos=16
+         celulas16: azul=0 verde=0 vermelho=0 outras=0 mistas=2 azuis= verdes=
+  ok     T16b sintoma documentado: com Unit = 1 (padrão do MARS) só 16 de 262144 pixels acendem (tela 'preta')
+         config: unit=16x16 display=512x512 base=0x10010000 conectado=false
+         imagem 512x512: pixels_acesos=0
+         celulas16: azul=0 verde=0 vermelho=0 outras=0 mistas=0 azuis= verdes=
+  ok     T16c sintoma documentado: sem 'Connect to MIPS' nada é desenhado
+         config: unit=16x16 display=512x512 base=0x10010000 conectado=true
+         comida=428
+         imagem 512x512: pixels_acesos=768
+         celulas16: azul=2 verde=1 vermelho=0 outras=0 mistas=0 azuis=(0,1)(0,2) verdes=(13,12)
+  ok     T16d altura 512: depois de comer, a nova comida aparece em (13,12), a posição gravada na memória
+         config: unit=16x16 display=512x256 base=0x10010000 conectado=true
+         comida=1023
+         imagem 512x256: pixels_acesos=512
+         celulas16: azul=2 verde=0 vermelho=0 outras=0 mistas=0 azuis=(0,1)(0,2) verdes=
+  ok     T16e sintoma documentado: com altura 256 só as linhas 0-15 aparecem (comida na linha 31: verde=0)
+
+TODOS OS TESTES PASSARAM
