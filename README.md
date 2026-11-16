@@ -5,7 +5,7 @@ simulador **MARS 4.5**. A saída é o **Bitmap Display** e a entrada são as tec
 **W, A, S, D**.
 
 - **Arquivo entregue:** [`src/snake.asm`](src/snake.asm).
-- **Integrantes do grupo:** Maria Fernanda, Juliana Maria, Vitor Fernandes, Vinicius  Silva, Lucas.
+- **Integrantes do grupo:** Maria Fernanda, Juliana Maria, Vitor Fernandes, Vinicius  Silva, Lucas Thomaz.
 
 ## Descrição
 
