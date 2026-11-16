@@ -37,8 +37,6 @@ a área nem no próprio corpo.
 ```
 snake-project/
 ├── README.md                 este arquivo
-├── doc/
-│   └── projeto_snake-especificacao.pdf   especificação oficial (não editada)
 ├── src/
 │   └── snake.asm             código-fonte do jogo (único arquivo entregue)
 ├── docs/
