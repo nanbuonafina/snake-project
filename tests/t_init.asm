@@ -1,5 +1,5 @@
 ###############################################################################
-# t_init.asm — T03: estado inicial (cobra de tamanho 1 em (0,0), comida, score).
+# estado inicial (cobra de tamanho 1 em (0,0), comida, score).
 ###############################################################################
 .data
 n_len:   .asciiz "T03 comprimento inicial = 1"

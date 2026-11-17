@@ -1,11 +1,9 @@
 ###############################################################################
-# e2e_prologue.asm — prólogo do teste de ponta a ponta (T13).
-#   Montado ANTES de src/snake.asm completo (com o main real). Deixa a tecla
-#   'd' pendente no receptor MMIO e salta para o main do jogo. Sem o
-#   Keyboard Simulator conectado o bit "pronto" não é limpo, então o jogo
-#   lê 'd' (direita) a cada consulta: a cobra anda de (0,0) até bater na
-#   parede direita, passando pelo laço, temporização e game_over reais.
-#   Não declara .data, para não deslocar o framebuffer de 0x10010000.
+# deixa a tecla'd' pendente no receptor MMIO e salta para o main do jogo. Sem o
+# Keyboard Simulator conectado o bit "pronto" não é limpo, então o jogo
+# lê 'd' (direita) a cada consulta: a cobra anda de (0,0) até bater na
+# parede direita, passando pelo laço, temporização e game_over reais.
+# Não declara .data, para não deslocar o framebuffer de 0x10010000.
 ###############################################################################
 .text
 e2e_start:

@@ -1,5 +1,5 @@
 ###############################################################################
-# t_grid.asm — T01/T02: framebuffer em 0x10010000 e endereçamento das células.
+# framebuffer em 0x10010000 e endereçamento das células.
 ###############################################################################
 .data
 n_base:  .asciiz "T01 frame esta em 0x10010000 (base do Bitmap Display)"

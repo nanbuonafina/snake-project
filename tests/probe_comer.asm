@@ -1,11 +1,7 @@
 ###############################################################################
-# probe_comer.asm — cenário de T16d/T16e (executado pelo tools/BitmapProbe).
-# NÃO é um t_*.asm: não roda no laço dos testes de linha de comando.
-#
-# Põe a comida na célula (0,2), anda 2x para a direita (come) e deixa a
+# coloca a comida na célula (0,2), anda 2x para a direita (come) e deixa a
 # rotina real spawn_food sortear a NOVA comida. Imprime "comida=<índice>"
 # e fica parado, para que o probe capture a tela do Bitmap Display.
-# Montado como: "j main" + src/snake.asm sem MAIN + test_lib + este arquivo.
 ###############################################################################
 .data
 pc_food: .asciiz "comida="

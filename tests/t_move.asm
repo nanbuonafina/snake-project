@@ -1,5 +1,5 @@
 ###############################################################################
-# t_move.asm — T07/T08/T12: movimento, crescimento, fila circular e pontuação.
+# movimento, crescimento, fila circular e pontuação.
 ###############################################################################
 .data
 n_mid:    .asciiz "T07 10 x direita + 10 x baixo: cabeca em (10,10)"

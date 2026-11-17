@@ -1,12 +1,12 @@
 ###############################################################################
-# t_invariants.asm — T15: teste de propriedades (memória, algoritmo e tela).
+# teste de propriedades (memória, algoritmo e tela).
 #
-# Um "jogador automático" escrito em MIPS joga milhares de passos:
+# um "jogador automático" escrito em MIPS joga milhares de passos:
 #   - normalmente vai na direção da comida, evitando paredes e o corpo;
 #   - em 1 de cada 16 passos aperta uma tecla aleatória (W/A/S/D), o que
 #     provoca colisões com a parede e com o corpo.
-# As teclas passam pela rotina real read_input (press_key), então a regra de
-# inversão (D2) vale como no jogo. Após uma colisão, uma partida nova começa.
+# as teclas passam pela rotina real read_input (press_key), então a regra de
+# inversão (D2) vale como no jogo. após uma colisão, uma partida nova começa.
 #
 # Após CADA passo, check_inv verifica:
 #   1  1 <= length <= 1024

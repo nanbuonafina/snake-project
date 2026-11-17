@@ -1,7 +1,7 @@
 ###############################################################################
-# t_input.asm — T05/T06: leitura AWSD pelo MMIO (sem bloqueio) e temporização.
-#   As teclas são simuladas escrevendo nos registradores do receptor MMIO
-#   (0xFFFF0000 / 0xFFFF0004) e chamando a rotina real read_input.
+# leitura AWSD pelo MMIO (sem bloqueio) e temporização.
+# as teclas são simuladas escrevendo nos registradores do receptor MMIO
+# (0xFFFF0000 / 0xFFFF0004) e chamando a rotina real read_input.
 ###############################################################################
 .data
 n_nokey:  .asciiz "T05 sem tecla pronta: read_input retorna sem mudar a direcao"

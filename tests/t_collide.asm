@@ -1,7 +1,7 @@
 ###############################################################################
-# t_collide.asm — T09/T10/T12: colisões com as paredes e com o corpo.
-#   Também verifica que a colisão não altera o estado (D7) e o fim por
-#   grade cheia (D8).
+# colisões com as paredes e com o corpo.
+# também verifica que a colisão não altera o estado (D7) e o fim por
+# grade cheia (D8).
 ###############################################################################
 .data
 n_up:     .asciiz "T09 (0,0) indo p/ cima: STATUS_WALL"

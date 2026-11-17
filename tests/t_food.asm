@@ -1,9 +1,8 @@
 ###############################################################################
-# t_food.asm — T04: geração aleatória da comida.
-#   a) 2000 sorteios em tabuleiro vazio: índice em 0..1023, nunca sobre a
-#      cobra, e todas as 32 linhas e 32 colunas aparecem (I e J cobrem 0..31).
-#   b) Metade superior ocupada pela cobra: 1000 sorteios, nunca sobre ela.
-#   c) Só uma célula livre: a comida vai exatamente para ela.
+#   2000 sorteios em tabuleiro vazio: índice em 0..1023, nunca sobre a
+#   cobra, e todas as 32 linhas e 32 colunas aparecem (I e J cobrem 0..31).
+#   metade superior ocupada pela cobra: 1000 sorteios, nunca sobre ela.
+#   só uma célula livre: a comida vai exatamente para ela.
 ###############################################################################
 .data
 n_range: .asciiz "T04 2000 sorteios: indice sempre em 0..1023"
