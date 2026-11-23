@@ -12,7 +12,7 @@
 #      S baixo, D direita.
 #    - Ao comer, a cobra cresce 1 celula e a comida reaparece em outro lugar.
 #    - Bater numa parede ou no proprio corpo encerra o jogo; a pontuacao
-#      e apresentada.
+#      e apresentada e o jogador escolhe entre jogar novamente ou sair.
 #    - Pontuacao: +1 a cada 0,5 s e +5 por comida coletada.
 #
 #  CONFIGURACAO DO MARS (antes de executar):
@@ -30,7 +30,8 @@
 #    2. Dados (.data): framebuffer (1o item, em 0x10010000) e estado do jogo
 #    3. Programa principal (main): inicializacao e laco do jogo
 #    4. Sub-rotinas: init_game, clear_screen, draw_cell, get_cell,
-#       spawn_food, read_input, wait_first_key, wait_tick, step, game_over
+#       spawn_food, read_input, flush_input, wait_first_key, wait_tick,
+#       step, game_over
 #
 #  REPRESENTACAO
 #    Cada celula da grade e identificada por um indice unico:
@@ -124,6 +125,8 @@
 .eqv SYS_TIME        30      # $a0 = tempo do sistema em ms (32 bits baixos)
 .eqv SYS_SET_SEED    40      # $a0 = id do gerador, $a1 = semente
 .eqv SYS_RAND_RANGE  42      # $a0 = id, $a1 = limite -> $a0 em [0, limite)
+.eqv SYS_CONFIRM     50      # caixa Sim/Nao/Cancelar: $a0 = mensagem;
+                             # retorna $a0 = 0 (Sim), 1 (Nao) ou 2 (Cancelar)
 .eqv SYS_MSG_INT     56      # caixa de dialogo: $a0 = mensagem, $a1 = inteiro
 .eqv RNG_ID          0       # id do gerador de numeros aleatorios
 
@@ -191,6 +194,8 @@ msg_ticks:  .asciiz "Movimentos (0,5 s cada): "
 msg_score:  .asciiz "PONTUACAO FINAL: "
 msg_nl:     .asciiz "\n"
 msg_dialog: .asciiz "GAME OVER!\nPontuacao final: "
+msg_again:  .asciiz "Jogar novamente?"
+msg_restart: .asciiz "\n=== NOVA PARTIDA ===\n"
 
 # Tabela com a mensagem de cada motivo de fim de jogo, indexada pelo STATUS.
 reason_tbl: .word 0, msg_wall, msg_body, msg_full
@@ -208,6 +213,7 @@ main:
     PRINT_STR(msg_cfg)              # configuracao exigida do Bitmap Display
     PRINT_STR(msg_help)
 
+restart:                          # game_over volta para ca se o jogador quiser
     jal  init_game            # tela limpa, cobra em (0,0), comida sorteada
     jal  wait_first_key       # parada ate a primeira tecla valida (decisao D1)
 
@@ -217,7 +223,7 @@ game_loop:
     beq  $v0, STATUS_OK, game_loop
 
     move $a0, $v0             # qualquer outro status encerra o jogo
-    jal  game_over            # mostra o resultado e termina (nao retorna)
+    jal  game_over            # mostra o resultado; reinicia ou termina (nao retorna)
 # ==== END MAIN ====
 
 
@@ -382,6 +388,23 @@ ri_validate:
 ri_accept:
     sw    $t3, next_dir
 ri_done:
+    jr    $ra
+
+#------------------------------------------------------------------------------
+# flush_input -- descarta uma tecla que ainda esteja pendente no teclado.
+#   Chamada antes de recomecar o jogo: uma tecla digitada no instante da
+#   morte ficaria guardada no MMIO e, na nova partida, wait_first_key a
+#   leria como se fosse a primeira tecla, iniciando o jogo sozinho.
+#   Ler o registrador de dados limpa o bit "pronto".
+#   Entrada: nenhuma.   Saida: nenhuma.   Altera: $t0-$t2.
+#------------------------------------------------------------------------------
+flush_input:
+    li    $t0, MMIO_RCV_CTRL
+    lw    $t1, 0($t0)               # registrador de controle do receptor
+    andi  $t1, $t1, MMIO_READY_BIT
+    beqz  $t1, fi_done              # nada pendente
+    lw    $t2, MMIO_RCV_DATA($t0)   # le e descarta a tecla
+fi_done:
     jr    $ra
 
 #------------------------------------------------------------------------------
@@ -570,13 +593,18 @@ step_return:
     jr    $ra
 
 #------------------------------------------------------------------------------
-# game_over -- mostra o estado final e a pontuacao e encerra o programa.
+# game_over -- mostra o estado final e a pontuacao e pergunta se o
+#   jogador quer jogar novamente.
 #   No Bitmap Display, o tabuleiro final fica visivel e a cabeca e pintada
 #   de vermelho (exceto quando a grade foi completada).
 #   No console (Run I/O): motivo, comprimento, comidas, movimentos e
-#   pontuacao. Tambem abre uma caixa de dialogo com a pontuacao.
+#   pontuacao. Tambem abre uma caixa de dialogo com a pontuacao e outra
+#   perguntando "Jogar novamente?" (Sim / Nao / Cancelar).
+#   Sim: descarta teclas pendentes e volta ao rotulo restart do main, que
+#        reinicia tudo (init_game zera tela, cobra, pontuacao e comida).
+#   Nao ou Cancelar: encerra o programa.
 #   Entrada: $a0 = status que encerrou o jogo (STATUS_WALL/BODY/FULL).
-#   Saida: nao retorna (syscall 10).
+#   Saida: nao retorna (vai para restart ou termina com syscall 10).
 #   Usa: $s0 = status, $s1 = comprimento e depois comidas, $s2 = pontuacao
 #        (sem salvar na pilha, pois a rotina nunca retorna).
 #------------------------------------------------------------------------------
@@ -633,6 +661,18 @@ go_report:
     li    $v0, SYS_MSG_INT
     syscall
 
+    # Pergunta se o jogador quer jogar novamente.
+    la    $a0, msg_again
+    li    $v0, SYS_CONFIRM
+    syscall                         # $a0 = 0 (Sim), 1 (Nao) ou 2 (Cancelar)
+    bnez  $a0, go_exit              # Nao ou Cancelar: encerra o programa
+
+    jal   flush_input               # descarta tecla digitada no instante da morte
+    PRINT_STR(msg_restart)
+    PRINT_STR(msg_help)
+    j     restart                   # nova partida (init_game zera todo o estado)
+
+go_exit:
     li    $v0, SYS_EXIT
     syscall
 
